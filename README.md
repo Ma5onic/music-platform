@@ -1,4 +1,4 @@
-music-platform
+Music Platform
 ==============
 
-A Symfony project created on August 8, 2016, 9:41 pm.
+A music platform build for musicians, for their musics.
