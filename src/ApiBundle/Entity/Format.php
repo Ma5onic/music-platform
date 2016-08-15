@@ -31,9 +31,9 @@ class Format
     /**
      * @var array
      *
-     * @ORM\Column(name="extensions", type="array", unique=true)
+     * @ORM\Column(name="extension", type="string", unique=true)
      */
-    private $extensions;
+    private $extension;
 
     /**
      * @var Music
@@ -78,7 +78,7 @@ class Format
     }
 
     /**
-     * Set extensions
+     * Set extension
      *
      * @param array $extensions
      *
@@ -140,5 +140,29 @@ class Format
     public function getMusics()
     {
         return $this->musics;
+    }
+
+    /**
+     * Set extension
+     *
+     * @param string $extension
+     *
+     * @return Format
+     */
+    public function setExtension($extension)
+    {
+        $this->extension = $extension;
+
+        return $this;
+    }
+
+    /**
+     * Get extension
+     *
+     * @return string
+     */
+    public function getExtension()
+    {
+        return $this->extension;
     }
 }
