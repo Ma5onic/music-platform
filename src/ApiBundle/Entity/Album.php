@@ -35,6 +35,13 @@ class Album
      */
     private $year;
 
+    /**
+     * @var Genre
+     *
+     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Genre")
+     */
+    private $genre;
+
 
     /**
      * Get id
@@ -93,5 +100,28 @@ class Album
     {
         return $this->year;
     }
-}
 
+    /**
+     * Set genre
+     *
+     * @param \ApiBundle\Entity\Genre $genre
+     *
+     * @return Album
+     */
+    public function setGenre(\ApiBundle\Entity\Genre $genre = null)
+    {
+        $this->genre = $genre;
+
+        return $this;
+    }
+
+    /**
+     * Get genre
+     *
+     * @return \ApiBundle\Entity\Genre
+     */
+    public function getGenre()
+    {
+        return $this->genre;
+    }
+}
