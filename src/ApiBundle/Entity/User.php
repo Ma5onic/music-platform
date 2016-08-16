@@ -3,6 +3,8 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -63,6 +65,21 @@ class User
      */
     private $biography;
 
+    /**
+     * @var array<Role>
+     *
+     * @ORM\Column(name="roles", type="array")
+     */
+    private $roles = [];
+
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $roles[] = new Role('ROLE_USER');
+    }
 
     /**
      * Get id
@@ -99,7 +116,7 @@ class User
     }
 
     /**
-     * Set lastName
+     * Set last name
      *
      * @param string $lastName
      *
@@ -113,7 +130,7 @@ class User
     }
 
     /**
-     * Get lastName
+     * Get last name
      *
      * @return string
      */
@@ -123,7 +140,7 @@ class User
     }
 
     /**
-     * Set firstname
+     * Set first name
      *
      * @param string $firstName
      *
@@ -137,7 +154,7 @@ class User
     }
 
     /**
-     * Get firstName
+     * Get first name
      *
      * @return string
      */
@@ -216,5 +233,52 @@ class User
     public function getBiography()
     {
         return $this->biography;
+    }
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     * <code>
+     * public function getRoles()
+     * {
+     *     return array('ROLE_USER');
+     * }
+     * </code>
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return string The user roles
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    public function addRole(Role $role) {
+        $this->roles[] = $role;
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt() {
+        return null;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }
