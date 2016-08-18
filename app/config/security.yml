@@ -1,19 +1,49 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
 security:
   encoders:
+    ApiBundle\Entity\User: bcrypt
     Symfony\Component\Security\Core\User\User: bcrypt
 
-  # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+  role_hierarchy:
+    ROLE_USER: ROLE_APP
+    ROLE_ADMIN: ROLE_USER
+
   providers:
-      in_memory:
-          memory: ~
+    chain_provider:
+      chain:
+        providers: [in_memory, user_provider]
+    in_memory:
+      memory:
+        users:
+          application:
+            password: $2y$13$HjPNrBpW2AnYnhdW1b4WNucW3OB5wAI4rJy3htN19kEiZqiYkKw6e
+            roles: 'ROLE_APP'
+    user_provider:
+      id: api.provider.user
 
   firewalls:
     # disables authentication for assets and the profiler, adapt it according to your needs
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+
+    doc:
+      pattern: ^/api/doc
+      security: false
+
+    login:
+      pattern:  ^/api/login
+      stateless: true
+      anonymous: true
+      form_login:
+        check_path:               /api/login_check
+        success_handler:          lexik_jwt_authentication.handler.authentication_success
+        failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+        require_previous_session: false
+
+    api:
+      pattern:   ^/api
+      stateless: true
+      lexik_jwt: ~
 
     main:
       anonymous: ~
@@ -24,3 +54,7 @@ security:
 
       # form_login: ~
       # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+  access_control:
+    - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }

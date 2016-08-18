@@ -256,6 +256,9 @@ class User implements UserInterface
         return $this->roles;
     }
 
+    /**
+     * @param Role $role The role to add to the current user
+     */
     public function addRole(Role $role) {
         $this->roles[] = $role;
     }

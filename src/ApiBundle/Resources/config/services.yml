@@ -1,4 +1,8 @@
 services:
-    api.service.user:
-        class: ApiBundle\Services\UserService
-        arguments: ["@doctrine.orm.default_entity_manager"]
+  api.service.user:
+    class: ApiBundle\Services\UserService
+    arguments: ["@doctrine.orm.default_entity_manager"]
+
+  api.provider.user:
+    class: ApiBundle\Security\UserProvider
+    arguments: ['@doctrine.orm.default_entity_manager']
