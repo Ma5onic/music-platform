@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -71,15 +71,6 @@ class User implements UserInterface
      * @ORM\Column(name="roles", type="array")
      */
     private $roles = [];
-
-
-    /**
-     * User constructor.
-     */
-    public function __construct()
-    {
-        $roles[] = new Role('ROLE_USER');
-    }
 
     /**
      * Get id
@@ -249,7 +240,7 @@ class User implements UserInterface
      * and populated in any number of different ways when the user object
      * is created.
      *
-     * @return string The user roles
+     * @return array The user roles
      */
     public function getRoles()
     {
@@ -280,8 +271,29 @@ class User implements UserInterface
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
      */
-    public function eraseCredentials()
+    public function eraseCredentials() {}
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
     {
-        // TODO: Implement eraseCredentials() method.
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password
+        ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password
+            ) = unserialize($serialized);
     }
 }
