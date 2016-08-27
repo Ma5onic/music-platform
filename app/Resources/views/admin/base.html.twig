@@ -80,6 +80,24 @@
             </h1>
         </section>
         <section class="content">
+            {% for type, messages in app.session.flashBag.all %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }} alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {% if type == 'success' %}<h4><i class="icon fa fa-check"></i> Succès</h4>{% endif %}
+                        {% if type == 'warning' %}<h4><i class="icon fa fa-warning"></i> Attention</h4>{% endif %}
+                        {% if type == 'info' %}<h4><i class="icon fa fa-info"></i> Info</h4>{% endif %}
+                        {% if type == 'danger' %}<h4><i class="icon fa fa-ban"></i> Danger</h4>{% endif %}
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% if app.session.flashBag is defined %}
+                    {% for msg in app.session.flashBag.get('success') %}
+
+                    {% endfor %}
+            {% endif %}
+
             {% block body %}{% endblock %}
         </section>
     </div>
