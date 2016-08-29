@@ -60,12 +60,12 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/music/genre/add")
+     * @Route("/music/genre")
      * @Method({"GET", "POST"})
      * @param Request $request The request that contains the data to insert
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function musicGenreAddAction(Request $request) {
+    public function musicGenreAction(Request $request) {
         $genre = new Genre();
         $form = $this->createFormBuilder($genre)
             ->add('name', TextType::class)
@@ -83,14 +83,29 @@ class AdminController extends Controller
                 $em->flush();
 
                 $this->addFlash("success", "");
-                return $this->redirectToRoute('app_admin_musicgenreadd');
+                return $this->redirectToRoute('app_admin_musicgenre');
             }
         }
 
-        return $this->render(':admin/music/genre:add.html.twig', array(
+        return $this->render(':admin/music:genre.html.twig', array(
             'form' => $form->createView(),
             'genres' => $this->getDoctrine()->getRepository('ApiBundle:Genre')->findAll()
         ));
+    }
+
+    /**
+     * @Route("/music/genre/remove/{id}")
+     * @param Genre $genre The genre that match the identifier in the route.
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse The response that is a redirection to the
+     * administration panel.
+     * @see http://symfony.com/doc/current/best_practices/controllers.html#using-the-paramconverter
+     */
+    public function musicGenreRemoveAction(Genre $genre) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->remove($genre);
+        $em->flush();
+
+        return $this->redirectToRoute('app_admin_musicgenre');
     }
 
     /**

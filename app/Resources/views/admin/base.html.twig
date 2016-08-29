@@ -66,9 +66,20 @@
             </div>
             <ul class="sidebar-menu">
                 <li class="header">ADMINISTRATION</li>
-                <li {% if music is defined %}class="active"{% endif %}><a href="{{ path("app_admin_music") }}"><i class="fa fa-music"></i> <span>Musique</span></a></li>
-                <li {% if profile is defined %}class="active"{% endif %}><a href="{{ path("app_admin_profile") }}"><i class="fa fa-user"></i> <span>Profil</span></a></li>
-                <li {% if seo is defined %}class="active"{% endif %}><a href="{{ path("app_admin_seo") }}"><i class="fa fa-bar-chart"></i> <span>Référencement</span></a></li>
+                <li class="{% if music is defined %}active {% endif %}treeview">
+                    <a href="#">
+                        <i class="fa fa-music"></i> <span>Musique</span>
+                    </a>
+                    <ul class="treeview-menu" style="display: none">
+                        <li class="treeview">
+                            <a href="{{ path('app_admin_musicgenre') }}">
+                                <i class="fa fa-circle-thin"></i> <span>Genre</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="{% if profile is defined %}active {% endif %}treeview"><a href="{{ path("app_admin_profile") }}"><i class="fa fa-user"></i> <span>Profil</span></a></li>
+                <li class="{% if seo is defined %}active {% endif %}treeview"><a href="{{ path("app_admin_seo") }}"><i class="fa fa-bar-chart"></i> <span>Référencement</span></a></li>
             </ul>
         </section>
     </aside>
