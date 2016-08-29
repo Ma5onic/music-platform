@@ -4,12 +4,15 @@ namespace AppBundle\Controller;
 
 use ApiBundle\Entity\Album;
 use ApiBundle\Entity\Genre;
+use AppBundle\Utils\FlashType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -82,7 +85,7 @@ class AdminController extends Controller
                 $em->persist($genre);
                 $em->flush();
 
-                $this->addFlash("success", "");
+                $this->addFlash(FlashType::SUCCESS, "{$genre->getName()} ajouté avec succès !");
                 return $this->redirectToRoute('app_admin_musicgenre');
             }
         }
@@ -94,7 +97,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/music/genre/remove/{id}")
+     * @Route("/music/genre/remove/{id}", requirements={"id": "\d+"})
      * @param Genre $genre The genre that match the identifier in the route.
      * @return \Symfony\Component\HttpFoundation\RedirectResponse The response that is a redirection to the
      * administration panel.
@@ -104,6 +107,8 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $em->remove($genre);
         $em->flush();
+
+        $this->addFlash(FlashType::SUCCESS, "Genre {$genre->getName()} supprimé avec succès");
 
         return $this->redirectToRoute('app_admin_musicgenre');
     }
