@@ -2,18 +2,27 @@
 
 namespace AppBundle\Controller;
 
+use Alchemy\Zippy\Zippy;
 use ApiBundle\Entity\Album;
 use ApiBundle\Entity\Genre;
 use AppBundle\Utils\FlashType;
+use Cocur\Slugify\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use wapmorgan\UnifiedArchive\UnifiedArchive;
 
 /**
  * @Route("/admin")
@@ -45,21 +54,67 @@ class AdminController extends Controller
 
     /**
      * @Route("/music/album/add")
+     * @Method({"GET", "POST"})
+     * @param Request $request The request that contains the data to insert
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function musicAlbumAddAction() {
-//        $album = new Album();
-//        $album->set
-//
-//        $form = $this->createFormBuilder($album)
-//            ->add('album', TextType::class)
-//            ->add('dueDate', DateType::class)
-//            ->add('save', SubmitType::class, array('label' => 'Create Task'))
-//            ->getForm();
-//
-//        return $this->render('default/new.html.twig', array(
-//            'form' => $form->createView(),
-//        ));
+    public function musicAlbumAddAction(Request $request) {
+        $album = new Album();
+        $album->setYear(new \DateTime());
+
+        $form = $this->createFormBuilder($album)
+            ->add('name', TextType::class)
+            ->add('file', FileType::class, ['label' => 'Archive'])
+            ->add('genre', EntityType::class, array(
+                'class' => 'ApiBundle\Entity\Genre',
+                'choice_label' => 'name'
+            ))
+            ->add('year', DateType::class)
+            ->add('save', SubmitType::class, array('label' => 'Téléverser'))
+            ->getForm();
+
+        if ($request->getMethod() == Request::METHOD_POST) {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                /** @var UploadedFile $file */
+                $file = $album->getFile();
+
+                $zippy = Zippy::load();
+                $slugify = new Slugify();
+
+                $fileName = $slugify->slugify($album->getName()) . '.' . $file->guessExtension();
+                $file->move(
+                    $this->getParameter('zip_directory'),
+                    $fileName
+                );
+
+                $dest = $this->getParameter('albums_directory') . DIRECTORY_SEPARATOR . $slugify->slugify($album->getName());
+
+                $fs = new Filesystem();
+                try {
+                    $fs->mkdir($dest);
+                } catch (IOExceptionInterface $e) {
+                    echo "An error occurred while creating your directory at " . $e->getPath();
+                }
+
+                $archive = $zippy->open($this->getParameter('zip_directory') . DIRECTORY_SEPARATOR . $fileName);
+                $archive->extract($dest);
+
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($album);
+                $em->flush();
+
+                $this->addFlash(FlashType::SUCCESS, "{$album->getName()} ajouté avec succès !");
+                return $this->redirectToRoute('app_admin_musicalbumadd');
+            }
+        }
+
+        return $this->render(':admin/music:album_add.html.twig', array(
+            'form' => $form->createView(),
+            'albums' => $this->getDoctrine()->getManager()->getRepository('ApiBundle:Album')->findAll()
+        ));
     }
 
     /**
@@ -79,8 +134,6 @@ class AdminController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $genre = $form->getData();
-
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($genre);
                 $em->flush();

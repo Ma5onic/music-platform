@@ -1,0 +1,55 @@
+{% extends ":admin:music.html.twig" %}
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        {% if albums %}
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                <div class="box box-info">
+                    <div class="box-header">
+                        Genres disponible
+                    </div>
+                    <div class="box-body no-padding">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nom</th>
+                                <th>Genre</th>
+                                <th>Année</th>
+                                <th>Supprimer</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for album in albums %}
+                                <tr>
+                                    <td>{{ album.id }}</td>
+                                    <td>{{ album.name }}</td>
+                                    <td>{{ album.genre.name }}</td>
+                                    <td>{{ album.year | date('Y') }}</td>
+                                    <td>
+                                        <a href="{{ path('app_admin_musicalbumadd', {'id': album.id}) }}"
+                                           class="btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 alert alert-info">
+                <p>Aucun album n'est actuellement disponible</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

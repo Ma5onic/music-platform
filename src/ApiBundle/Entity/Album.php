@@ -3,6 +3,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Album
@@ -41,6 +42,19 @@ class Album
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Genre")
      */
     private $genre;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank(message="Veuillez téléverser une archive contenant l'album")
+     * @Assert\File(mimeTypes={
+     *     "application/zip",
+     *     "application/gzip",
+     *     "application/x-tar",
+     *     "application/x-bzip2",
+     *     "application/x-gtar"})
+     */
+    private $file;
 
 
     /**
@@ -123,5 +137,21 @@ class Album
     public function getGenre()
     {
         return $this->genre;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param string $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
     }
 }
