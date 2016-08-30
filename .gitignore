@@ -14,3 +14,12 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+!/web/media/albums
+/web/media/albums/*
+!web/media/albums/.gitkeep
+!/web/media/songs
+/web/media/songs/*
+!web/media/songs/.gitkeep
+!/web/media/zips
+/web/media/zips/*
+!web/media/zips/.gitkeep
