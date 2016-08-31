@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -18,11 +19,10 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use wapmorgan\UnifiedArchive\UnifiedArchive;
 
 /**
  * @Route("/admin")
@@ -83,10 +83,10 @@ class AdminController extends Controller
                 $zippy = Zippy::load();
                 $slugify = new Slugify();
 
-                $fileName = $slugify->slugify($album->getName()) . '.' . $file->guessExtension();
+                $album->setFile($slugify->slugify($album->getName()) . '.' . $file->guessExtension());
                 $file->move(
                     $this->getParameter('zip_directory'),
-                    $fileName
+                    $album->getFile()
                 );
 
                 $dest = $this->getParameter('albums_directory') . DIRECTORY_SEPARATOR . $slugify->slugify($album->getName());
@@ -98,7 +98,7 @@ class AdminController extends Controller
                     echo "An error occurred while creating your directory at " . $e->getPath();
                 }
 
-                $archive = $zippy->open($this->getParameter('zip_directory') . DIRECTORY_SEPARATOR . $fileName);
+                $archive = $zippy->open($this->getParameter('zips_directory') . DIRECTORY_SEPARATOR . $album->getFile());
                 $archive->extract($dest);
 
 
@@ -118,10 +118,39 @@ class AdminController extends Controller
     }
 
     /**
+     * @Route("/music/album/remove/{id}", requirements={"id": "\d+"})
+     * @param Album $album The album that match the identifier in the route.
+     * @return RedirectResponse
+     */
+    public function musicAlbumRemoveAction(Album $album) {
+        try {
+            $fs = new Filesystem();
+            $fs->remove($this->getParameter('albums_directory') . DIRECTORY_SEPARATOR . $album->getFile());
+            $fs->remove($this->getParameter('zips_directory') . DIRECTORY_SEPARATOR . $album->getFile() . "zip");
+        } catch (IOException $IOException) {
+            $this->get('logger')->alert($IOException->getMessage());
+        } finally {
+            $this->addFlash(
+                FlashType::DANGER,
+                'There is a problem between the files and the database. Please contact your administrator'
+            );
+            $this->redirectToRoute('app_admin_musicalbumadd');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($album);
+        $em->flush();
+
+        $this->addFlash(FlashType::SUCCESS, "Album {$album->getName()} supprimé avec succès");
+
+        return $this->redirectToRoute('app_admin_musicalbumadd');
+    }
+
+    /**
      * @Route("/music/genre")
      * @Method({"GET", "POST"})
-     * @param Request $request The request that contains the data to insert
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @param Request $request The request that contains the data to insert.
+     * @return RedirectResponse|Response A redirection if it is a POST request, a classic response instead.
      */
     public function musicGenreAction(Request $request) {
         $genre = new Genre();
@@ -152,8 +181,7 @@ class AdminController extends Controller
     /**
      * @Route("/music/genre/remove/{id}", requirements={"id": "\d+"})
      * @param Genre $genre The genre that match the identifier in the route.
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse The response that is a redirection to the
-     * administration panel.
+     * @return RedirectResponse The response that is a redirection to the administration panel.
      * @see http://symfony.com/doc/current/best_practices/controllers.html#using-the-paramconverter
      */
     public function musicGenreRemoveAction(Genre $genre) {

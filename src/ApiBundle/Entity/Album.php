@@ -37,6 +37,13 @@ class Album
     private $year;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="year", type="string")
+     */
+    private $cover;
+
+    /**
      * @var Genre
      *
      * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Genre")
@@ -46,13 +53,15 @@ class Album
     /**
      * @var string
      *
+     * @ORM\Column(name="file", type="string")
      * @Assert\NotBlank(message="Veuillez téléverser une archive contenant l'album")
      * @Assert\File(mimeTypes={
      *     "application/zip",
      *     "application/gzip",
      *     "application/x-tar",
      *     "application/x-bzip2",
-     *     "application/x-gtar"})
+     *     "application/x-gtar"}
+     * )
      */
     private $file;
 
@@ -153,5 +162,21 @@ class Album
     public function setFile($file)
     {
         $this->file = $file;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCover()
+    {
+        return $this->cover;
+    }
+
+    /**
+     * @param mixed $cover
+     */
+    public function setCover($cover)
+    {
+        $this->cover = $cover;
     }
 }
