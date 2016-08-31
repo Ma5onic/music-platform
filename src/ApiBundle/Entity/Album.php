@@ -39,7 +39,7 @@ class Album
     /**
      * @var string
      *
-     * @ORM\Column(name="year", type="string")
+     * @ORM\Column(name="cover", type="string")
      */
     private $cover;
 
