@@ -24,5 +24,6 @@ parameters:
     jwt_token_ttl:        86400
 
     albums_directory: '%kernel.root_dir%/../web/media/albums'
-    zip_directory :   '%kernel.root_dir%/../web/media/zips'
-    songs_directory : '%kernel.root_dir%/../web/media/songs'
+    zips_directory:   '%kernel.root_dir%/../web/media/zips'
+    songs_directory:  '%kernel.root_dir%/../web/media/songs'
+    covers_directory: '%kernel.root_dir%/../web/img/covers'

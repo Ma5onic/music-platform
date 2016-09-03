@@ -23,3 +23,6 @@
 !/web/media/zips
 /web/media/zips/*
 !web/media/zips/.gitkeep
+!/web/img/covers
+/web/img/covers/*
+!web/img/covers/.gitkeep

@@ -14,13 +14,14 @@
                         Genres disponible
                     </div>
                     <div class="box-body no-padding">
-                        <table class="table">
+                        <table class="table table-responsive">
                             <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Nom</th>
                                 <th>Genre</th>
                                 <th>Année</th>
+                                <th>Image</th>
                                 <th>Supprimer</th>
                             </tr>
                             </thead>
@@ -31,6 +32,7 @@
                                     <td>{{ album.name }}</td>
                                     <td>{{ album.genre.name }}</td>
                                     <td>{{ album.year | date('Y') }}</td>
+                                    <td><img src="{{ asset('img/covers/') }}{{ album.cover }}" class="img-responsive"></td>
                                     <td>
                                         <a href="{{ path('app_admin_musicalbumremove', {'id': album.id}) }}"
                                            class="btn btn-danger">

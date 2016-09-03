@@ -65,6 +65,7 @@ class AdminController extends Controller
         $form = $this->createFormBuilder($album)
             ->add('name', TextType::class)
             ->add('file', FileType::class, ['label' => 'Archive'])
+            ->add('cover', FileType::class, ['label' => 'Image de couverture'])
             ->add('genre', EntityType::class, array(
                 'class' => 'ApiBundle\Entity\Genre',
                 'choice_label' => 'name'
@@ -79,14 +80,22 @@ class AdminController extends Controller
             if ($form->isSubmitted() && $form->isValid()) {
                 /** @var UploadedFile $file */
                 $file = $album->getFile();
+                /** @var UploadedFile $cover */
+                $cover = $album->getCover();
 
                 $zippy = Zippy::load();
                 $slugify = new Slugify();
 
                 $album->setFile($slugify->slugify($album->getName()) . '.' . $file->guessExtension());
+                $album->setCover($slugify->slugify($album->getName()) . '.' . $cover->guessExtension());
+
                 $file->move(
-                    $this->getParameter('zip_directory'),
+                    $this->getParameter('zips_directory'),
                     $album->getFile()
+                );
+                $cover->move(
+                    $this->getParameter('covers_directory'),
+                    $album->getCover()
                 );
 
                 $dest = $this->getParameter('albums_directory') . DIRECTORY_SEPARATOR . $slugify->slugify($album->getName());
@@ -100,7 +109,6 @@ class AdminController extends Controller
 
                 $archive = $zippy->open($this->getParameter('zips_directory') . DIRECTORY_SEPARATOR . $album->getFile());
                 $archive->extract($dest);
-
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($album);
@@ -123,17 +131,19 @@ class AdminController extends Controller
      * @return RedirectResponse
      */
     public function musicAlbumRemoveAction(Album $album) {
+        $slugify = new Slugify();
         try {
             $fs = new Filesystem();
-            $fs->remove($this->getParameter('albums_directory') . DIRECTORY_SEPARATOR . $album->getFile());
-            $fs->remove($this->getParameter('zips_directory') . DIRECTORY_SEPARATOR . $album->getFile() . "zip");
+            $fs->remove($this->getParameter('albums_directory') . DIRECTORY_SEPARATOR . $slugify->slugify($album->getName()));
+            $fs->remove($this->getParameter('zips_directory') . DIRECTORY_SEPARATOR . $album->getFile());
+            $fs->remove($this->getParameter('covers_directory') . DIRECTORY_SEPARATOR . $album->getCover());
         } catch (IOException $IOException) {
             $this->get('logger')->alert($IOException->getMessage());
-        } finally {
             $this->addFlash(
                 FlashType::DANGER,
                 'There is a problem between the files and the database. Please contact your administrator'
             );
+
             $this->redirectToRoute('app_admin_musicalbumadd');
         }
 

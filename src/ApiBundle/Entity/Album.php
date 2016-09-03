@@ -40,6 +40,8 @@ class Album
      * @var string
      *
      * @ORM\Column(name="cover", type="string")
+     * @Assert\NotBlank(message="Veuillez téléverser une image pour l'album")
+     * @Assert\File()
      */
     private $cover;
 
