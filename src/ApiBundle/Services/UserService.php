@@ -26,7 +26,7 @@ class UserService
     }
 
     /**
-     * @return UserDTO
+     * @return array<UserDTO>
      */
     public function getAllUsers() {
         $userEntities = $this->userRepository->findAll();

@@ -1,0 +1,8 @@
+services:
+  api.mapper.album:
+    class: ApiBundle\Mappers\AlbumMapper
+    arguments:
+      - "@api.mapper.genre"
+
+  api.mapper.genre:
+    class: ApiBundle\Mappers\GenreMapper

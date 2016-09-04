@@ -18,12 +18,17 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    # JWT parameters
     jwt_private_key_path: '%kernel.root_dir%/../var/jwt/private.pem'
     jwt_public_key_path:  '%kernel.root_dir%/../var/jwt/public.pem'
     jwt_key_pass_phrase:  ''
     jwt_token_ttl:        86400
 
+    # Application parameters
     albums_directory: '%kernel.root_dir%/../web/media/albums'
     zips_directory:   '%kernel.root_dir%/../web/media/zips'
     songs_directory:  '%kernel.root_dir%/../web/media/songs'
     covers_directory: '%kernel.root_dir%/../web/img/covers'
+
+    # Serializer parameters
+    jms_serializer.camel_case_naming_strategy.class: JMS\Serializer\Naming\CamelCaseNamingStrategy

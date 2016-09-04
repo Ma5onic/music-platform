@@ -11,6 +11,7 @@ class User
     /**
      * @var int
      *
+     * @Serializer\ReadOnly(readOnly=true)
      * @Serializer\Type("integer")
      */
     private $id;
