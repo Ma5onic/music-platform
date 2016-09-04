@@ -67,6 +67,13 @@ class Album
      */
     private $file;
 
+    /**
+     * @var array<Music>
+     *
+     * @ORM\OneToMany(targetEntity="ApiBundle\Entity\Music", mappedBy="album")
+     */
+    private $musics;
+
 
     /**
      * Get id
@@ -180,5 +187,46 @@ class Album
     public function setCover($cover)
     {
         $this->cover = $cover;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->musics = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add music
+     *
+     * @param \ApiBundle\Entity\Music $music
+     *
+     * @return Album
+     */
+    public function addMusic(\ApiBundle\Entity\Music $music)
+    {
+        $this->musics[] = $music;
+
+        return $this;
+    }
+
+    /**
+     * Remove music
+     *
+     * @param \ApiBundle\Entity\Music $music
+     */
+    public function removeMusic(\ApiBundle\Entity\Music $music)
+    {
+        $this->musics->removeElement($music);
+    }
+
+    /**
+     * Get musics
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMusics()
+    {
+        return $this->musics;
     }
 }

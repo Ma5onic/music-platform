@@ -31,16 +31,23 @@ class Music
     /**
      * @var Album
      *
-     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Album")
+     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Album", inversedBy="musics")
      */
     private $album;
 
     /**
-     * @var Format
+     * @var string
      *
-     * @ORM\ManyToMany(targetEntity="ApiBundle\Entity\Format", inversedBy="musics")
+     * @ORM\Column(name="mime_type", type="string", length=255)
      */
-    private $format;
+    private $mimeType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="file_name", type="string", length=255)
+     */
+    private $fileName;
 
     /**
      * Get id
@@ -80,7 +87,7 @@ class Music
      */
     public function __construct()
     {
-        $this->format = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->mimeType = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -116,7 +123,7 @@ class Music
      */
     public function addFormat(\ApiBundle\Entity\Format $format)
     {
-        $this->format[] = $format;
+        $this->mimeType[] = $format;
 
         return $this;
     }
@@ -128,7 +135,7 @@ class Music
      */
     public function removeFormat(\ApiBundle\Entity\Format $format)
     {
-        $this->format->removeElement($format);
+        $this->mimeType->removeElement($format);
     }
 
     /**
@@ -136,8 +143,41 @@ class Music
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFormat()
+    public function getMimeType()
     {
-        return $this->format;
+        return $this->mimeType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * @param string $fileName
+     * @return Music
+     */
+    public function setFileName($fileName)
+    {
+        $this->fileName = $fileName;
+
+        return $this;
+    }
+
+    /**
+     * Set format
+     *
+     * @param string $mimeType
+     *
+     * @return Music
+     */
+    public function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+
+        return $this;
     }
 }

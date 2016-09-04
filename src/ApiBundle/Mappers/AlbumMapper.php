@@ -8,12 +8,16 @@ use ApiBundle\DTO\Album as AlbumDTO;
 
 class AlbumMapper extends AbstractMapper
 {
-    /** @var MapperInterface */
+    /** @var GenreMapper */
     private $genreMapper;
 
-    public function __construct(MapperInterface $genreMapper)
+    /** @var MusicMapper */
+    private $musicMapper;
+
+    public function __construct(MapperInterface $genreMapper, MapperInterface $musicMapper)
     {
         $this->genreMapper = $genreMapper;
+        $this->musicMapper = $musicMapper;
     }
 
     /**
@@ -29,7 +33,8 @@ class AlbumMapper extends AbstractMapper
             ->setYear($entity->getYear())
             ->setGenre($this->genreMapper->entityToDto($entity->getGenre()))
             ->setFile($entity->getFile())
-            ->setCover($entity->getCover());
+            ->setCover($entity->getCover())
+            ->setMusics($this->musicMapper->entitiesListToDtoList($entity->getMusics()->toArray()));
 
         return $albumDTO;
     }

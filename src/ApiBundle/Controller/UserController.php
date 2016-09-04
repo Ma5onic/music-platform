@@ -36,6 +36,7 @@ class UserController extends ApiController
     {
         $dtos = $this->get('api.service.user')->getAllUsers();
         $json = $this->serializer->serialize($dtos, 'json');
+
         return new Response(
             $json,
             Response::HTTP_OK,

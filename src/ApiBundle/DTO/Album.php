@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Album
 {
     /**
-     * The numeric identifier of the album
+     * The numeric identifier of the album.
      * @var int
      *
      * @Serializer\ReadOnly(readOnly=true)
@@ -17,7 +17,7 @@ class Album
     private $id;
 
     /**
-     * The genre of the album
+     * The genre of the album.
      * @var Genre
      *
      * @Serializer\Type("ApiBundle\DTO\Genre")
@@ -27,7 +27,7 @@ class Album
     private $genre;
 
     /**
-     * The name of the album
+     * The name of the album.
      * @var string
      *
      * @Serializer\Type("string")
@@ -37,7 +37,7 @@ class Album
     private $name;
 
     /**
-     * The year when the album was released
+     * The year when the album was released.
      * @var string
      *
      * @Serializer\Type("DateTime")
@@ -47,7 +47,7 @@ class Album
     private $year;
 
     /**
-     * The location of the album on the server
+     * The location of the album on the server.
      * @var string
      *
      * @Serializer\Type("string")
@@ -58,7 +58,7 @@ class Album
 
 
     /**
-     * The location of the cover of the album
+     * The location of the cover of the album.
      * @var string
      *
      * @Serializer\Type("string")
@@ -66,6 +66,16 @@ class Album
      * @Assert\Type(type="string")
      */
     private $cover;
+
+    /**
+     * The musics of the album.
+     * @var array<Music>
+     *
+     * @Serializer\Type("array<ApiBundle\DTO\Music>")
+     *
+     * @Assert\Type(type="array<ApiBundle\DTO\Music>")
+     */
+    private $musics;
 
     /**
      * @return int
@@ -177,6 +187,25 @@ class Album
     public function setCover($cover)
     {
         $this->cover = $cover;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMusics()
+    {
+        return $this->musics;
+    }
+
+    /**
+     * @param array $musics
+     * @return Album
+     */
+    public function setMusics($musics)
+    {
+        $this->musics = $musics;
 
         return $this;
     }

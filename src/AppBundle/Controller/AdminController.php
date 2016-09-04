@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Alchemy\Zippy\Zippy;
 use ApiBundle\Entity\Album;
 use ApiBundle\Entity\Genre;
+use ApiBundle\Entity\Music;
 use AppBundle\Utils\FlashType;
 use Cocur\Slugify\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -14,6 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -68,7 +71,7 @@ class AdminController extends Controller
             ->add('cover', FileType::class, ['label' => 'Image de couverture'])
             ->add('genre', EntityType::class, array(
                 'class' => 'ApiBundle\Entity\Genre',
-                'choice_label' => 'name'
+                'choice_label' => 'name',
             ))
             ->add('year', DateType::class)
             ->add('save', SubmitType::class, array('label' => 'Téléverser'))
@@ -110,8 +113,32 @@ class AdminController extends Controller
                 $archive = $zippy->open($this->getParameter('zips_directory') . DIRECTORY_SEPARATOR . $album->getFile());
                 $archive->extract($dest);
 
+                $finder = new Finder();
+                $finder->files()->in($this->getParameter('albums_directory') . DIRECTORY_SEPARATOR . $slugify->slugify($album->getName()));
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($album);
+
+                /** @var SplFileInfo $file */
+                foreach ($finder as $file) {
+                    $finfo = new \finfo();
+
+                    $music = new Music();
+                    $music->setAlbum($album)
+                        ->setTitle(explode('.', $file->getFilename())[0])
+                        ->setFileName($file->getFilename())
+                        ->setMimeType($finfo->file(
+                            $this->getParameter('albums_directory')
+                            . DIRECTORY_SEPARATOR
+                            . $slugify->slugify($album->getName())
+                            . DIRECTORY_SEPARATOR
+                            . $file->getFilename(),
+                            FILEINFO_MIME
+                        ));
+
+                    $em->persist($music);
+                }
+
                 $em->flush();
 
                 $this->addFlash(FlashType::SUCCESS, "{$album->getName()} ajouté avec succès !");
@@ -121,7 +148,7 @@ class AdminController extends Controller
 
         return $this->render(':admin/music:album_add.html.twig', array(
             'form' => $form->createView(),
-            'albums' => $this->getDoctrine()->getManager()->getRepository('ApiBundle:Album')->findAll()
+            'albums' => $this->getDoctrine()->getManager()->getRepository('ApiBundle:Album')->findAll(),
         ));
     }
 
@@ -184,7 +211,7 @@ class AdminController extends Controller
 
         return $this->render(':admin/music:genre.html.twig', array(
             'form' => $form->createView(),
-            'genres' => $this->getDoctrine()->getRepository('ApiBundle:Genre')->findAll()
+            'genres' => $this->getDoctrine()->getRepository('ApiBundle:Genre')->findAll(),
         ));
     }
 
