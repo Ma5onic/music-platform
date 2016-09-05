@@ -8,3 +8,9 @@ services:
     arguments:
       - "@doctrine.orm.default_entity_manager"
       - "@api.mapper.album"
+
+  api.service.music:
+    class: ApiBundle\Services\MusicService
+    arguments:
+      - "@doctrine.orm.default_entity_manager"
+      - "@api.mapper.music"
