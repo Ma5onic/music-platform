@@ -250,7 +250,8 @@ class User implements UserInterface, \Serializable
     /**
      * @param Role $role The role to add to the current user
      */
-    public function addRole(Role $role) {
+    public function addRole(Role $role)
+    {
         $this->roles[] = $role;
     }
 
@@ -261,7 +262,8 @@ class User implements UserInterface, \Serializable
      *
      * @return string|null The salt
      */
-    public function getSalt() {
+    public function getSalt()
+    {
         return null;
     }
 
@@ -271,18 +273,22 @@ class User implements UserInterface, \Serializable
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
      */
-    public function eraseCredentials() {}
+    public function eraseCredentials()
+    {
+    }
 
     /**
      * {@inheritdoc}
      */
     public function serialize()
     {
-        return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password
-        ));
+        return serialize(
+            array(
+                $this->id,
+                $this->username,
+                $this->password,
+            )
+        );
     }
 
     /**

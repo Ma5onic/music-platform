@@ -3,12 +3,12 @@
 namespace ApiBundle\Services;
 
 
+use ApiBundle\DTO\Album as AlbumDTO;
 use ApiBundle\Exceptions\AlbumNotFoundException;
 use ApiBundle\Mappers\AlbumMapper;
 use ApiBundle\Mappers\MapperInterface;
 use ApiBundle\Repository\AlbumRepository;
 use Doctrine\ORM\EntityManager;
-use ApiBundle\DTO\Album as AlbumDTO;
 
 class AlbumService
 {
@@ -24,7 +24,7 @@ class AlbumService
     /**
      * AlbumService constructor.
      * @param EntityManager $entityManager Entity manager to get the repository.
-     * @param MapperInterface $mapper the mapper used 
+     * @param MapperInterface $mapper the mapper used
      */
     public function __construct(EntityManager $entityManager, MapperInterface $mapper)
     {
@@ -36,7 +36,8 @@ class AlbumService
     /**
      * @return array<AlbumDTO>
      */
-    public function getAllAlbums() {
+    public function getAllAlbums()
+    {
         $albumEntities = $this->albumRepository->findAll();
         if ($albumEntities === null) {
             throw new AlbumNotFoundException();
@@ -49,7 +50,8 @@ class AlbumService
      * @param $id integer The numeric identifier of the album to fetch.
      * @return AlbumDTO The album DTO
      */
-    public function getAlbum($id) {
+    public function getAlbum($id)
+    {
         $albumEntity = $this->albumRepository->find($id);
         if ($albumEntity === null) {
             throw new AlbumNotFoundException();

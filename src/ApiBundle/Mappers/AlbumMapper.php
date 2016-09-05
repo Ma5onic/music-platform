@@ -3,8 +3,8 @@
 namespace ApiBundle\Mappers;
 
 
-use ApiBundle\Entity\Album as AlbumEntity;
 use ApiBundle\DTO\Album as AlbumDTO;
+use ApiBundle\Entity\Album as AlbumEntity;
 
 class AlbumMapper extends AbstractMapper
 {

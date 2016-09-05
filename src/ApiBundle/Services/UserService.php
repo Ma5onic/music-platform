@@ -1,6 +1,7 @@
 <?php
 
 namespace ApiBundle\Services;
+
 use ApiBundle\DTO\User as UserDTO;
 use ApiBundle\Exceptions\UserNotFoundException;
 use Doctrine\ORM\EntityManager;
@@ -12,7 +13,7 @@ class UserService
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var EntityRepository  */
+    /** @var EntityRepository */
     private $userRepository;
 
     /**
@@ -28,7 +29,8 @@ class UserService
     /**
      * @return array<UserDTO>
      */
-    public function getAllUsers() {
+    public function getAllUsers()
+    {
         $userEntities = $this->userRepository->findAll();
         if ($userEntities === null) {
             throw new UserNotFoundException();

@@ -17,9 +17,9 @@ class AlbumNotFoundException extends HttpException
     /**
      * Constructor.
      *
-     * @param string     $message  The internal exception message
+     * @param string $message The internal exception message
      * @param \Exception $previous The previous exception
-     * @param int        $code     The internal exception code
+     * @param int $code The internal exception code
      */
     public function __construct($message = "Album not found", \Exception $previous = null, $code = 0)
     {

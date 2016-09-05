@@ -63,7 +63,8 @@ class MusicController extends ApiController
      * @param $id integer The numeric identifier of the music.
      * @return Response The response with the data from the database.
      */
-    public function getMusicAction($id) {
+    public function getMusicAction($id)
+    {
         $dtos = $this->get('api.service.music')->getMusic($id);
         $json = $this->serializer->serialize($dtos, 'json');
 

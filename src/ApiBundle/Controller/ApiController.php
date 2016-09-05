@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Controller;
 
-
 use JMS\Serializer\Serializer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;

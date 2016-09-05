@@ -32,9 +32,21 @@ class UserController extends ApiController
      *
      * @return Response
      */
-    public function indexAction()
+    public function getUsersAction()
     {
         $dtos = $this->get('api.service.user')->getAllUsers();
+        $json = $this->serializer->serialize($dtos, 'json');
+
+        return new Response(
+            $json,
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/vnd.api+json']
+        );
+    }
+
+    public function getUserAction($id)
+    {
+        $dtos = $this->get('api.service.user')->getUser($id);
         $json = $this->serializer->serialize($dtos, 'json');
 
         return new Response(

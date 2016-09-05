@@ -31,7 +31,8 @@ class MusicService
         $this->musicMapper = $musicMapper;
     }
 
-    public function getMusic($id) {
+    public function getMusic($id)
+    {
         $musicEntity = $this->musicRepository->find($id);
         if ($musicEntity === null) {
             throw new MusicNotFoundException();
@@ -40,7 +41,8 @@ class MusicService
         return $this->musicMapper->entityToDto($musicEntity);
     }
 
-    public function getAllMusics() {
+    public function getAllMusics()
+    {
         $musicEntities = $this->musicRepository->findAll();
         if ($musicEntities === null) {
             throw new MusicNotFoundException();

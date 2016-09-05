@@ -33,7 +33,8 @@ class AlbumController extends ApiController
      *
      * @return Response
      */
-    public function getAlbumsAction() {
+    public function getAlbumsAction()
+    {
         $dtos = $this->get('api.service.album')->getAllAlbums();
         $json = $this->serializer->serialize($dtos, 'json');
 
@@ -64,7 +65,8 @@ class AlbumController extends ApiController
      * @param $id integer The numeric identifier of the album to get
      * @return Response The HTTP response
      */
-    public function getAlbumAction($id) {
+    public function getAlbumAction($id)
+    {
         $dtos = $this->get('api.service.album')->getAlbum($id);
         $json = $this->serializer->serialize($dtos, 'json');
 

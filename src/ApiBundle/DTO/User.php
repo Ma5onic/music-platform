@@ -3,8 +3,8 @@
 namespace ApiBundle\DTO;
 
 
-use JMS\Serializer\Annotation as Serializer;
 use ApiBundle\Entity\User as UserEntity;
+use JMS\Serializer\Annotation as Serializer;
 
 class User
 {
@@ -62,7 +62,8 @@ class User
      * @param UserEntity $entity The User entity to cast into a User DTO
      * @return User A User DTO from the User entity.
      */
-    public static function fromEntity(UserEntity $entity) {
+    public static function fromEntity(UserEntity $entity)
+    {
         $dto = new User();
         $dto->setId($entity->getId());
         $dto->setUsername($entity->getUsername());
@@ -78,7 +79,8 @@ class User
      * @param array $entities Entities to cast into a DTO.
      * @return array An array of User DTO from an entities list.
      */
-    public static function fromEntitiesList(array $entities) {
+    public static function fromEntitiesList(array $entities)
+    {
         $dtoList = [];
         foreach ($entities as $entity) {
             $dtoList[] = static::fromEntity($entity);
@@ -90,7 +92,8 @@ class User
     /**
      * @return UserEntity The user entity from the DTO.
      */
-    public function toEntity() {
+    public function toEntity()
+    {
         $entity = new UserEntity();
         $entity->setUsername($this->getUsername());
         $entity->setLastName($this->getLastName());

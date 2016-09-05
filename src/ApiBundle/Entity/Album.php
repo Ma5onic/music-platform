@@ -188,6 +188,7 @@ class Album
     {
         $this->cover = $cover;
     }
+
     /**
      * Constructor
      */

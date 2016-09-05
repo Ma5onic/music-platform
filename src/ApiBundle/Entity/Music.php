@@ -82,6 +82,7 @@ class Music
     {
         return $this->title;
     }
+
     /**
      * Constructor
      */
