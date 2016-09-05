@@ -44,6 +44,25 @@ class UserController extends ApiController
         );
     }
 
+    /**
+     * This resource is used to get all the users in the database.
+     * @Route("/{id}", requirements={"id" : "\d+"})
+     * @Method("GET")
+     * @ApiDoc(
+     *     description="Return the user that match the numeric identifier",
+     *     statusCodes={
+     *         200={
+     *             "Returned when successful",
+     *             "Returned when the array is empty"
+     *         },
+     *         404="Returned when not found"
+     *     },
+     *     output="ApiBundle\DTO\User"
+     * )
+     *
+     * @param $id integer The numeric identifier of the user.
+     * @return Response The response that contains all the data matching the numeric identifier.
+     */
     public function getUserAction($id)
     {
         $dtos = $this->get('api.service.user')->getUser($id);

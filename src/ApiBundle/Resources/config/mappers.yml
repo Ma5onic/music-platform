@@ -10,3 +10,6 @@ services:
 
   api.mapper.music:
     class: ApiBundle\Mappers\MusicMapper
+
+  api.mapper.user:
+    class: ApiBundle\Mappers\UserMapper

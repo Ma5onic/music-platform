@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation as Serializer;
 class User
 {
     /**
+     * The numeric identifier of the user.
      * @var int
      *
      * @Serializer\ReadOnly(readOnly=true)
@@ -17,6 +18,7 @@ class User
     private $id;
 
     /**
+     * The username of the user.
      * @var string
      *
      * @Serializer\Type("string")
@@ -24,6 +26,7 @@ class User
     private $username;
 
     /**
+     * The last name of the user.
      * @var string
      *
      * @Serializer\Type("string")
@@ -31,6 +34,7 @@ class User
     private $lastName;
 
     /**
+     * The first name of the user.
      * @var string
      *
      * @Serializer\Type("string")
@@ -38,6 +42,7 @@ class User
     private $firstName;
 
     /**
+     * The password of the user.
      * @var string
      *
      * @Serializer\Type("string")
@@ -45,6 +50,7 @@ class User
     private $password;
 
     /**
+     * The email address of the user.
      * @var string
      *
      * @Serializer\Type("string")
@@ -52,57 +58,12 @@ class User
     private $email;
 
     /**
+     * The biography of the user.
      * @var string
      *
      * @Serializer\Type("string")
      */
     private $biography;
-
-    /**
-     * @param UserEntity $entity The User entity to cast into a User DTO
-     * @return User A User DTO from the User entity.
-     */
-    public static function fromEntity(UserEntity $entity)
-    {
-        $dto = new User();
-        $dto->setId($entity->getId());
-        $dto->setUsername($entity->getUsername());
-        $dto->setLastName($entity->getLastName());
-        $dto->setFirstName($entity->getFirstName());
-        $dto->setEmail($entity->getEmail());
-        $dto->setBiography($entity->getBiography());
-
-        return $dto;
-    }
-
-    /**
-     * @param array $entities Entities to cast into a DTO.
-     * @return array An array of User DTO from an entities list.
-     */
-    public static function fromEntitiesList(array $entities)
-    {
-        $dtoList = [];
-        foreach ($entities as $entity) {
-            $dtoList[] = static::fromEntity($entity);
-        }
-
-        return $dtoList;
-    }
-
-    /**
-     * @return UserEntity The user entity from the DTO.
-     */
-    public function toEntity()
-    {
-        $entity = new UserEntity();
-        $entity->setUsername($this->getUsername());
-        $entity->setLastName($this->getLastName());
-        $entity->setFirstName($this->getFirstName());
-        $entity->setEmail($this->getEmail());
-        $entity->setBiography($this->getBiography());
-
-        return $entity;
-    }
 
     /**
      * @return int

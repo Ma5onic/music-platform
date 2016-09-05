@@ -1,7 +1,9 @@
 services:
   api.service.user:
     class: ApiBundle\Services\UserService
-    arguments: ["@doctrine.orm.default_entity_manager"]
+    arguments:
+      - "@doctrine.orm.default_entity_manager"
+      - "api.mapper.user"
 
   api.service.album:
     class: ApiBundle\Services\AlbumService
