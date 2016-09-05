@@ -8,6 +8,7 @@ use JMS\Serializer\Annotation as Serializer;
 class Music
 {
     /**
+     * The numeric identifier of the music in the database.
      * @var integer
      *
      * @Serializer\ReadOnly(readOnly=true)
@@ -16,6 +17,7 @@ class Music
     private $id;
 
     /**
+     * The title of the music.
      * @var string
      *
      * @Serializer\Type(name="string")
@@ -23,6 +25,7 @@ class Music
     private $title;
 
     /**
+     * The file name of the music on the file system.
      * @var string
      *
      * @Serializer\Type(name="string")
@@ -30,6 +33,7 @@ class Music
     private $fileName;
 
     /**
+     * The MIME type of the file.
      * @var string
      *
      * @Serializer\Type(name="string")
@@ -37,6 +41,7 @@ class Music
     private $mimeType;
 
     /**
+     * The numeric identifier of the album the music is linked to.
      * @var integer
      *
      * @Serializer\Type(name="integer")

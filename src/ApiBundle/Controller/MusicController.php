@@ -43,4 +43,34 @@ class MusicController extends ApiController
             ['Content-Type' => ApiController::CONTENT_TYPE]
         );
     }
+
+    /**
+     * This resource is useful to get a music in the database.
+     *
+     * @Route("/{id}")
+     * @Method("GET")
+     * @ApiDoc(
+     *     description="Return the musics that match the identifier given in the route",
+     *     statusCodes={
+     *         200={
+     *             "Returned when successful",
+     *             "Returned when the array is empty"
+     *         },
+     *         404="Returned when not found"
+     *     },
+     *     output="ApiBundle\DTO\Music"
+     * )
+     * @param $id integer The numeric identifier of the music.
+     * @return Response The response with the data from the database.
+     */
+    public function getMusicAction($id) {
+        $dtos = $this->get('api.service.music')->getMusic($id);
+        $json = $this->serializer->serialize($dtos, 'json');
+
+        return new Response(
+            $json,
+            Response::HTTP_OK,
+            ['Content-Type' => ApiController::CONTENT_TYPE]
+        );
+    }
 }
