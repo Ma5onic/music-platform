@@ -48,7 +48,7 @@ class AlbumController extends ApiController
     /**
      * This resource is useful to get an album.
      *
-     * @Route("/{id}")
+     * @Route("/{id}", requirements={"id" : "\d+"})
      * @Method("GET")
      * @ApiDoc(
      *     description="Return the album matching the parameter",

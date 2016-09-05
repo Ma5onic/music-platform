@@ -47,7 +47,7 @@ class MusicController extends ApiController
     /**
      * This resource is useful to get a music in the database.
      *
-     * @Route("/{id}")
+     * @Route("/{id}", requirements={"id" : "\d+"})
      * @Method("GET")
      * @ApiDoc(
      *     description="Return the musics that match the identifier given in the route",
