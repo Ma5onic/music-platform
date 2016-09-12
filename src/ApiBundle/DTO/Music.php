@@ -13,6 +13,7 @@ class Music
      *
      * @Serializer\ReadOnly(readOnly=true)
      * @Serializer\Type(name="integer")
+     * @Serializer\Since("1.0.0")
      */
     private $id;
 
@@ -21,6 +22,7 @@ class Music
      * @var string
      *
      * @Serializer\Type(name="string")
+     * @Serializer\Since("1.0.0")
      */
     private $title;
 
@@ -29,6 +31,7 @@ class Music
      * @var string
      *
      * @Serializer\Type(name="string")
+     * @Serializer\Since("1.0.0")
      */
     private $fileName;
 
@@ -37,6 +40,7 @@ class Music
      * @var string
      *
      * @Serializer\Type(name="string")
+     * @Serializer\Since("1.0.0")
      */
     private $mimeType;
 
@@ -45,6 +49,7 @@ class Music
      * @var integer
      *
      * @Serializer\Type(name="integer")
+     * @Serializer\Since("1.0.0")
      */
     private $albumId;
 

@@ -14,6 +14,7 @@ class User
      *
      * @Serializer\ReadOnly(readOnly=true)
      * @Serializer\Type("integer")
+     * @Serializer\Since("1.0.0")
      */
     private $id;
 
@@ -22,6 +23,7 @@ class User
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      */
     private $username;
 
@@ -30,6 +32,7 @@ class User
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      */
     private $lastName;
 
@@ -38,6 +41,7 @@ class User
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      */
     private $firstName;
 
@@ -46,6 +50,7 @@ class User
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      */
     private $password;
 
@@ -54,6 +59,7 @@ class User
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      */
     private $email;
 
@@ -62,6 +68,7 @@ class User
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      */
     private $biography;
 

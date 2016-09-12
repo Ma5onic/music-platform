@@ -15,7 +15,9 @@ class Genre
      * The numeric identifier of the genre.
      * @var int
      *
+     * @Serializer\Type("integer")
      * @Serializer\ReadOnly(readOnly=true)
+     * @Serializer\Since("1.0.0")
      */
     private $id;
 
@@ -24,6 +26,7 @@ class Genre
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      */
     private $name;
 

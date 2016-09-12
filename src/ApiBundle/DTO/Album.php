@@ -13,6 +13,7 @@ class Album
      *
      * @Serializer\ReadOnly(readOnly=true)
      * @Serializer\Type("integer")
+     * @Serializer\Since("1.0.0")
      */
     private $id;
 
@@ -21,6 +22,7 @@ class Album
      * @var Genre
      *
      * @Serializer\Type("ApiBundle\DTO\Genre")
+     * @Serializer\Since("1.0.0")
      *
      * @Assert\Type(type="ApiBundle\DTO\Genre")
      */
@@ -31,6 +33,7 @@ class Album
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      *
      * @Assert\Type(type="string")
      */
@@ -41,6 +44,7 @@ class Album
      * @var string
      *
      * @Serializer\Type("DateTime")
+     * @Serializer\Since("1.0.0")
      *
      * @Assert\Type(type="DateTime")
      */
@@ -51,6 +55,7 @@ class Album
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      *
      * @Assert\Type(type="string")
      */
@@ -62,6 +67,7 @@ class Album
      * @var string
      *
      * @Serializer\Type("string")
+     * @Serializer\Since("1.0.0")
      *
      * @Assert\Type(type="string")
      */
@@ -72,6 +78,7 @@ class Album
      * @var array<Music>
      *
      * @Serializer\Type("array<ApiBundle\DTO\Music>")
+     * @Serializer\Since("1.0.0")
      *
      * @Assert\Type(type="array<ApiBundle\DTO\Music>")
      */
