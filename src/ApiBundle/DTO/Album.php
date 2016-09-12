@@ -5,6 +5,10 @@ namespace ApiBundle\DTO;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class Album
+ * @package ApiBundle\DTO
+ */
 class Album
 {
     /**

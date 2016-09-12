@@ -19,7 +19,6 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nom</th>
-                                <th>Genre</th>
                                 <th>Année</th>
                                 <th>Image</th>
                                 <th>Supprimer</th>
@@ -30,7 +29,6 @@
                                 <tr>
                                     <td>{{ album.id }}</td>
                                     <td>{{ album.name }}</td>
-                                    <td>{{ album.genre.name }}</td>
                                     <td>{{ album.year | date('Y') }}</td>
                                     <td><img src="{{ asset('img/covers/') }}{{ album.cover }}" class="img-responsive"></td>
                                     <td>
