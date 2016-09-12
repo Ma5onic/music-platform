@@ -8,15 +8,11 @@ use ApiBundle\Entity\Album as AlbumEntity;
 
 class AlbumMapper extends AbstractMapper
 {
-    /** @var GenreMapper */
-    private $genreMapper;
-
     /** @var MusicMapper */
     private $musicMapper;
 
-    public function __construct(MapperInterface $genreMapper, MapperInterface $musicMapper)
+    public function __construct(MapperInterface $musicMapper)
     {
-        $this->genreMapper = $genreMapper;
         $this->musicMapper = $musicMapper;
     }
 
@@ -31,7 +27,6 @@ class AlbumMapper extends AbstractMapper
         $albumDTO->setId($entity->getId())
             ->setName($entity->getName())
             ->setYear($entity->getYear())
-            ->setGenre($this->genreMapper->entityToDto($entity->getGenre()))
             ->setFile($entity->getFile())
             ->setCover($entity->getCover())
             ->setMusics($this->musicMapper->entitiesListToDtoList($entity->getMusics()->toArray()));

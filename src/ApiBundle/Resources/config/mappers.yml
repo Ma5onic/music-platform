@@ -2,11 +2,7 @@ services:
   api.mapper.album:
     class: ApiBundle\Mappers\AlbumMapper
     arguments:
-      - "@api.mapper.genre"
       - "@api.mapper.music"
-
-  api.mapper.genre:
-    class: ApiBundle\Mappers\GenreMapper
 
   api.mapper.music:
     class: ApiBundle\Mappers\MusicMapper

@@ -46,13 +46,6 @@ class Album
     private $cover;
 
     /**
-     * @var Genre
-     *
-     * @ORM\ManyToOne(targetEntity="ApiBundle\Entity\Genre")
-     */
-    private $genre;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="file", type="string")
@@ -131,30 +124,6 @@ class Album
     public function getYear()
     {
         return $this->year;
-    }
-
-    /**
-     * Set genre
-     *
-     * @param \ApiBundle\Entity\Genre $genre
-     *
-     * @return Album
-     */
-    public function setGenre(\ApiBundle\Entity\Genre $genre = null)
-    {
-        $this->genre = $genre;
-
-        return $this;
-    }
-
-    /**
-     * Get genre
-     *
-     * @return \ApiBundle\Entity\Genre
-     */
-    public function getGenre()
-    {
-        return $this->genre;
     }
 
     /**

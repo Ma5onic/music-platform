@@ -22,17 +22,6 @@ class Album
     private $id;
 
     /**
-     * The genre of the album.
-     * @var Genre
-     *
-     * @Serializer\Type("ApiBundle\DTO\Genre")
-     * @Serializer\Since("1.0.0")
-     *
-     * @Assert\Type(type="ApiBundle\DTO\Genre")
-     */
-    private $genre;
-
-    /**
      * The name of the album.
      * @var string
      *
@@ -103,25 +92,6 @@ class Album
     public function setId($id)
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGenre()
-    {
-        return $this->genre;
-    }
-
-    /**
-     * @param Genre $genre
-     * @return Album
-     */
-    public function setGenre($genre)
-    {
-        $this->genre = $genre;
 
         return $this;
     }
