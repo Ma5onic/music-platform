@@ -6,6 +6,7 @@ use Alchemy\Zippy\Zippy;
 use ApiBundle\Entity\Album;
 use ApiBundle\Entity\Genre;
 use ApiBundle\Entity\Music;
+use ApiBundle\Entity\Post;
 use AppBundle\Utils\FlashType;
 use Cocur\Slugify\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -20,6 +21,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -180,54 +182,6 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/music/genre")
-     * @Method({"GET", "POST"})
-     * @param Request $request The request that contains the data to insert.
-     * @return RedirectResponse|Response A redirection if it is a POST request, a classic response instead.
-     */
-    public function musicGenreAction(Request $request) {
-        $genre = new Genre();
-        $form = $this->createFormBuilder($genre)
-            ->add('name', TextType::class)
-            ->add('save', SubmitType::class, array('label' => 'Créer le genre'))
-            ->getForm();
-
-        if ($request->getMethod() == Request::METHOD_POST) {
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($genre);
-                $em->flush();
-
-                $this->addFlash(FlashType::SUCCESS, "{$genre->getName()} ajouté avec succès !");
-                return $this->redirectToRoute('app_admin_musicgenre');
-            }
-        }
-
-        return $this->render(':admin/music:genre.html.twig', array(
-            'form' => $form->createView(),
-            'genres' => $this->getDoctrine()->getRepository('ApiBundle:Genre')->findAll(),
-        ));
-    }
-
-    /**
-     * @Route("/music/genre/remove/{id}", requirements={"id": "\d+"})
-     * @param Genre $genre The genre that match the identifier in the route.
-     * @return RedirectResponse The response that is a redirection to the administration panel.
-     * @see http://symfony.com/doc/current/best_practices/controllers.html#using-the-paramconverter
-     */
-    public function musicGenreRemoveAction(Genre $genre) {
-        $em = $this->getDoctrine()->getEntityManager();
-        $em->remove($genre);
-        $em->flush();
-
-        $this->addFlash(FlashType::SUCCESS, "Genre {$genre->getName()} supprimé avec succès");
-
-        return $this->redirectToRoute('app_admin_musicgenre');
-    }
-
-    /**
      * @Route("/profile")
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -241,5 +195,40 @@ class AdminController extends Controller
      */
     public function seoAction() {
         return $this->render(':admin:seo.html.twig');
+    }
+
+    /**
+     * @Route("/post")
+     * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function postAction(Request $request) {
+        $post = new Post();
+        $post->setDate(new \DateTime());
+
+        $form = $this->createFormBuilder($post)
+            ->add('title', TextType::class)
+            ->add('content', TextareaType::class)
+            ->add('save', SubmitType::class, array('label' => 'Créer le post'))
+            ->getForm();
+
+        if ($request->getMethod() == Request::METHOD_POST) {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($post);
+                $em->flush();
+
+                $this->addFlash(FlashType::SUCCESS, "{$post->getTitle()} ajouté avec succès !");
+                return $this->redirectToRoute('app_admin_music');
+            }
+        }
+
+        return $this->render(':admin:post.html.twig', array(
+            'form' => $form->createView(),
+            'posts' => $this->getDoctrine()->getManager()->getRepository('ApiBundle:Post')->findAll()
+        ));
     }
 }

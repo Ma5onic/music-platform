@@ -85,6 +85,7 @@
                 </li>
                 <li class="{% if profile is defined %}active {% endif %}treeview"><a href="{{ path("app_admin_profile") }}"><i class="fa fa-user"></i> <span>Profil</span></a></li>
                 <li class="{% if seo is defined %}active {% endif %}treeview"><a href="{{ path("app_admin_seo") }}"><i class="fa fa-bar-chart"></i> <span>Référencement</span></a></li>
+                <li class="{% if post is defined %}active {% endif %}treeview"><a href="{{ path("app_admin_post") }}"><i class="fa fa-file-text-o"></i> <span>Post</span></a></li>
             </ul>
         </section>
     </aside>
