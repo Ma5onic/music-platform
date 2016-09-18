@@ -72,7 +72,7 @@ class AdminController extends Controller
             ->add('file', FileType::class, ['label' => 'Archive'])
             ->add('cover', FileType::class, ['label' => 'Image de couverture'])
             ->add('year', DateType::class)
-            ->add('save', SubmitType::class, array('label' => 'Téléverser'))
+            ->add('save', SubmitType::class, array('label' => 'Enregistrer'))
             ->getForm();
 
         if ($request->getMethod() == Request::METHOD_POST) {
