@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+{% block body %}
+    <h1>Alex BC.</h1>
+    <ul>
+    {% for album in albums %}
+        <li>{{ album.name }}</li>
+        <li><img src="{{ asset('img/covers') }}/{{ album.cover }}"
+                 alt="Image de couverture de l'album {{ album.name }}"></li>
+        <li>
+            <ul>
+                {% for music in album.musics %}
+                    <li>{{ music.title }} <audio controls="controls" src="{{ asset("media/albums") }}/{{ album.name }}/{{ music.fileName }}"></audio></li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
