@@ -40,7 +40,7 @@ class UserController extends ApiController
         return new Response(
             $json,
             Response::HTTP_OK,
-            ['Content-Type' => 'application/vnd.api+json']
+            ['Content-Type' => ApiController::CONTENT_TYPE]
         );
     }
 
@@ -71,7 +71,7 @@ class UserController extends ApiController
         return new Response(
             $json,
             Response::HTTP_OK,
-            ['Content-Type' => 'application/vnd.api+json']
+            ['Content-Type' => ApiController::CONTENT_TYPE]
         );
     }
 }
