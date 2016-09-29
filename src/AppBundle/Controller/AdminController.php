@@ -4,14 +4,12 @@ namespace AppBundle\Controller;
 
 use Alchemy\Zippy\Zippy;
 use ApiBundle\Entity\Album;
-use ApiBundle\Entity\Genre;
 use ApiBundle\Entity\Music;
 use ApiBundle\Entity\Post;
 use AppBundle\Utils\FlashType;
 use Cocur\Slugify\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -58,6 +56,55 @@ class AdminController extends Controller
     }
 
     /**
+     * @Route("/music/single/add")
+     * @Method({"GET", "POST"})
+     * @param Request $request The request that contains the data to insert
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function musicSingleAddAction(Request $request) {
+        $music = new Music();
+
+        $form = $this->createFormBuilder($music)
+            ->add('title', TextType::class)
+            ->add('filename', FileType::class, ['label' => 'Fichier audio'])
+            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
+            ->getForm();
+
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                /** @var UploadedFile $file */
+                $file = $music->getFileName();
+                $finfo = new \finfo();
+
+                $music->setFileName(str_replace(' ', '', $file->getClientOriginalName()))
+                    ->setMimeType($finfo->file(
+                        $file,
+                        FILEINFO_MIME
+                    ));
+
+                $file->move(
+                    $this->getParameter('songs_directory'),
+                    $music->getFileName()
+                );
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($music);
+                $em->flush();
+
+                $this->addFlash(FlashType::SUCCESS, "{$music->getTitle()} ajouté avec succès !");
+                return $this->redirectToRoute('app_admin_musicsingleadd');
+            }
+        }
+
+        return $this->render(':admin/music:single_add.html.twig', array(
+            'form' => $form->createView(),
+            'songs' => $this->getDoctrine()->getManager()->getRepository('ApiBundle:Music')->findByAlbum(null),
+        ));
+    }
+
+    /**
      * @Route("/music/album/add")
      * @Method({"GET", "POST"})
      * @param Request $request The request that contains the data to insert
@@ -72,10 +119,10 @@ class AdminController extends Controller
             ->add('file', FileType::class, ['label' => 'Archive'])
             ->add('cover', FileType::class, ['label' => 'Image de couverture'])
             ->add('year', DateType::class)
-            ->add('save', SubmitType::class, array('label' => 'Enregistrer'))
+            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->getForm();
 
-        if ($request->getMethod() == Request::METHOD_POST) {
+        if ($request->isMethod(Request::METHOD_POST)) {
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {

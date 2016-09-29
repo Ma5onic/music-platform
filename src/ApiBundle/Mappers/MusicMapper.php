@@ -19,8 +19,13 @@ class MusicMapper extends AbstractMapper
         $musicDTO->setId($entity->getId())
             ->setTitle($entity->getTitle())
             ->setFileName($entity->getFileName())
-            ->setAlbumId($entity->getAlbum()->getId())
             ->setMimeType($entity->getMimeType());
+
+        if ($entity->getAlbum() != null) {
+            $musicDTO->setAlbumId($entity->getAlbum()->getId());
+        } else {
+            $musicDTO->setAlbumId(null);
+        }
 
         return $musicDTO;
     }

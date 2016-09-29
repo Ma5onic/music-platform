@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ApiController extends Controller
 {
-    const CONTENT_TYPE = 'application/vnd.api+json';
+    const CONTENT_TYPE = 'application/json';
 
     /** @var Serializer */
     protected $serializer;
