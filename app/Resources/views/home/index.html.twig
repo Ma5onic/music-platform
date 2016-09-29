@@ -1,18 +1,36 @@
 {% extends "base.html.twig" %}
 {% block body %}
     <h1>Alex BC.</h1>
-    <ul>
-    {% for album in albums %}
-        <li>{{ album.name }}</li>
-        <li><img src="{{ asset('img/covers') }}/{{ album.cover }}"
-                 alt="Image de couverture de l'album {{ album.name }}"></li>
-        <li>
-            <ul>
-                {% for music in album.musics %}
-                    <li>{{ music.title }} <audio controls="controls" src="{{ asset("media/albums") }}/{{ album.name }}/{{ music.fileName }}"></audio></li>
-                {% endfor %}
-            </ul>
-        </li>
-    {% endfor %}
-    </ul>
+    {% if albums is not null and albums is not empty %}
+        <h2>Albums</h2>
+        <ul>
+            {% for album in albums %}
+                <li>{{ album.name }}</li>
+                <li><img src="{{ asset('img/covers') }}/{{ album.cover }}"
+                         alt="Image de couverture de l'album {{ album.name }}"></li>
+                <li>
+                    <ul>
+                        {% for music in album.musics %}
+                            <li>{{ music.title }}
+                                <audio controls="controls"
+                                       src="{{ asset("media/albums") }}/{{ album.name }}/{{ music.fileName }}"></audio>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if songs is not null and songs is not empty %}
+        <h2>Single</h2>
+        <ul>
+            {% for song in songs %}
+                <li>{{ song.title }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if admin is not null and admin is not empty %}
+        <h2>Qui suis-je ?</h2>
+        <p>{{ admin.biography }}</p>
+    {% endif %}
 {% endblock %}

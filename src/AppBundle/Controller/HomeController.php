@@ -34,8 +34,14 @@ class HomeController extends Controller
             $em->flush();
         }
 
+        $admin = $this->getDoctrine()->getRepository('ApiBundle:User')->findAll()[0];
+        $albums = $this->getDoctrine()->getRepository('ApiBundle:Album')->findAll();
+        $songs = $this->getDoctrine()->getRepository('ApiBundle:Music')->findBy(['album' => null]);
+
         return $this->render(':home:index.html.twig', [
-            'albums' => $this->getDoctrine()->getRepository('ApiBundle:Album')->findAll()
+            'albums' => $albums,
+            'admin' => $admin,
+            'songs' => $songs
         ]);
     }
 }
